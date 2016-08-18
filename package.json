@@ -7,7 +7,7 @@
   "scripts": {
     "test": "standard"
   },
-  "keywords": ["slow", "dependencies"],
+  "keywords": ["slow", "dependencies", "measure", "npm", "install"],
   "author": "Nolan Lawson <nolan@nolanlawson.com>",
   "license": "Apache-2.0",
   "dependencies": {
@@ -26,7 +26,7 @@
     "temp": "^0.8.3"
   },
   "devDependencies": {
-    "standard": "^7.1.2",
+    "standard": "^7.1.2"
   },
   "files": []
 }
