@@ -55,9 +55,7 @@ function doNpmInstalls (deps) {
     promise = promise.then(function () {
       return mkdir(dep)
     }).then(function (dir) {
-      return Promise.all([
-        exec(shellEscape([ 'npm', 'config', 'set', 'cache', path.join(dir, '.cache') ]))
-      ]).then(function () {
+      return exec(shellEscape([ 'npm', 'config', 'set', 'cache', path.join(dir, '.cache') ])).then(function () {
         var start = now()
         return exec(shellEscape([ 'npm', 'install', dep + '@' + version ]), {
           cwd: dir,
@@ -101,10 +99,10 @@ function report (times) {
     show_index: false,
     has_header: true
   }))
-  console.log('Total time: ' + prettyMs(sum(times.map(function (time) {
+  console.log('Combined time: ' + prettyMs(sum(times.map(function (time) {
     return time.time
   }))))
-  console.log('Total size: ' + prettierBytes(sum(times.map(function (time) {
+  console.log('Combined size: ' + prettierBytes(sum(times.map(function (time) {
     return time.size
   }))))
 }
