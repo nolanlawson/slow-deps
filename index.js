@@ -54,7 +54,7 @@ function doNpmInstalls (deps) {
       return mkdir(dep)
     }).then(function (dir) {
       return Promise.all([
-        exec(shellEscape([ 'npm', 'config', 'set', 'cache', path.join(dir, '.cache') ])),
+        exec(shellEscape([ 'npm', 'config', 'set', 'cache', path.join(dir, '.cache') ]))
       ]).then(function () {
         var start = now()
         return exec(shellEscape([ 'npm', 'install', dep + '@' + version ]), {
