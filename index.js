@@ -37,7 +37,10 @@ function cleanup () {
 function getDeps () {
   return readFile('package.json', 'utf8').then(function (str) {
     var json = JSON.parse(str)
-    var deps = extend({}, json.dependencies, json.devDependencies, json.optionalDependencies)
+    var deps = extend({}, json.dependencies, json.optionalDependencies)
+    if (process.argv.indexOf('--production') === -1) {
+      extend(deps, json.devDependencies)
+    }
     console.log('Analyzing ' + Object.keys(deps).length + ' dependencies...')
     return deps
   }).catch(function () {
