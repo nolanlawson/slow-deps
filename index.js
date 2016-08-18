@@ -99,10 +99,10 @@ function report (times) {
     show_index: false,
     has_header: true
   }))
-  console.log('Combined time: ' + prettyMs(sum(times.map(function (time) {
+  console.log('Total time (non-deduped): ' + prettyMs(sum(times.map(function (time) {
     return time.time
   }))))
-  console.log('Combined size: ' + prettierBytes(sum(times.map(function (time) {
+  console.log('Total size (non-deduped): ' + prettierBytes(sum(times.map(function (time) {
     return time.size
   }))))
 }

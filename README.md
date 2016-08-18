@@ -26,8 +26,8 @@ Analyzing 7 dependencies...
 | mocha                | 4.3s  | 924 KB | 16     |
 | immediate            | 1.3s  | 24 KB  | 0      |
 --------------------------------------------------
-Combined time: 52.6s
-Combined size: 29 MB
+Total time (non-deduped): 52.6s
+Total size (non-deduped): 29 MB
 ```
 
 Details
@@ -42,10 +42,10 @@ from slowest to fastest.
 In additon to the install time, the size on disk and the total number of transitive dependencies are also printed.
 
 Note that this doesn't measure the cost of npm de-duplicating the sub-dependencies; 
-it only measures the time for installing each dependency independently. So the "combined time" and "combined size"
+it only measures the time for installing each dependency independently. So the "total time" and "total size"
 are both just rough estimates, as are the per-package times, because you may have packages with many common
 dependencies that would therefore get de-duped.
 
 It's also worth noting that because this tool creates a temporary npm cache while it works,
 you'll be seeing the _uncached_ time for each package. Therefore your actual `npm install` should run a bit faster,
-assuming everythign is cached.
+assuming everything is cached.
