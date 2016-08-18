@@ -50,6 +50,13 @@ It's also worth noting that because this tool creates a temporary npm cache whil
 you'll be seeing the _uncached_ time for each package. Therefore your actual `npm install` should run a bit faster,
 assuming everything is cached.
 
+Options
+----
+
+    slow-deps --production
+
+Tells slow-deps to skip over devDependencies.
+
 Related
 ----
 
