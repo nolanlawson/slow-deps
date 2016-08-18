@@ -1,11 +1,7 @@
 slow-deps
 ====
 
-CLI to show which dependencies in a project are the slowest to `npm install`.
-
-Run this in a directory with a `package.json`, and it will analyze all the `dependencies`, 
-`devDependencies`, and `optionalDependencies`, then `npm install` each one in a temporary 
-directory with a temporary cache, then measure the install times, as well as the size on disk and the total number of transitive dependencies.
+CLI to measure which dependencies in a project are the slowest to `npm install`.
 
 Usage
 ----
@@ -39,6 +35,11 @@ Total size: 29 MB
 
 Details
 ----
+
+
+Run this in a directory with a `package.json`, and it will analyze all the `dependencies`, 
+`devDependencies`, and `optionalDependencies`, then `npm install` each one in a temporary 
+directory with a temporary cache, then measure the install times, as well as the size on disk and the total number of transitive dependencies.
 
 Note that this doesn't measure the cost of npm de-duplicating the sub-dependencies; 
 it only measures the time for installing each dependency independently.
