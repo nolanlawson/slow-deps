@@ -19,6 +19,7 @@
   "author": "Nolan Lawson <nolan@nolanlawson.com>",
   "license": "Apache-2.0",
   "dependencies": {
+    "any-shell-escape": "^0.1.1",
     "child-process-promise": "^1.1.0",
     "denodeify": "^1.2.1",
     "get-folder-size": "^1.0.0",
@@ -29,7 +30,6 @@
     "prettier-bytes": "^1.0.3",
     "pretty-ms": "^2.1.0",
     "progress": "^1.1.8",
-    "shell-escape": "^0.2.0",
     "tablify": "^0.1.5",
     "temp": "^0.8.3"
   },
