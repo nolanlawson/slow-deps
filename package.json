@@ -1,0 +1,32 @@
+{
+  "name": "slow-deps",
+  "version": "1.0.0",
+  "description": "Determine which dependencies in a project are slowest to install",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "keywords": ["slow", "dependencies"],
+  "author": "Nolan Lawson <nolan@nolanlawson.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "child-process-promise": "^1.1.0",
+    "denodeify": "^1.2.1",
+    "get-folder-size": "^1.0.0",
+    "js-extend": "^1.0.1",
+    "lie": "^3.1.0",
+    "math-sum": "^1.0.0",
+    "node-graceful": "^0.2.3",
+    "performance-now": "^0.2.0",
+    "prettier-bytes": "^1.0.3",
+    "pretty-ms": "^2.1.0",
+    "shell-escape": "^0.2.0",
+    "tablify": "^0.1.5",
+    "temp": "^0.8.3"
+  },
+  "devDependencies": {
+    "standard": "^7.1.2",
+  },
+  "files": []
+}
