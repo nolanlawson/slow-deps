@@ -18,15 +18,15 @@ Analyzing 7 dependencies...
 --------------------------------------------------
 | Dependency           | Time  | Size   | # Deps |
 --------------------------------------------------
-| browserify           | 20.5s | 14 MB  | 94     |
-| promises-aplus-tests | 7.7s  | 2.4 MB | 24     |
-| jshint               | 6.9s  | 4.6 MB | 26     |
-| istanbul             | 6.2s  | 5.1 MB | 27     |
-| mocha                | 4.6s  | 924 KB | 16     |
-| uglify-js            | 3.9s  | 1.7 MB | 18     |
+| browserify           | 22.2s | 14 MB  | 94     |
+| jshint               | 7.9s  | 4.6 MB | 26     |
+| istanbul             | 7s    | 5.1 MB | 27     |
+| promises-aplus-tests | 5.4s  | 2.4 MB | 24     |
+| uglify-js            | 4.4s  | 1.7 MB | 18     |
+| mocha                | 4.3s  | 924 KB | 16     |
 | immediate            | 1.3s  | 24 KB  | 0      |
 --------------------------------------------------
-Total time: 51s
+Total time: 52.6s
 Total size: 29 MB
 ```
 
