@@ -49,3 +49,10 @@ dependencies that would therefore get de-duped.
 It's also worth noting that because this tool creates a temporary npm cache while it works,
 you'll be seeing the _uncached_ time for each package. Therefore your actual `npm install` should run a bit faster,
 assuming everything is cached.
+
+Related
+----
+
+- [pkgfiles](https://www.npmjs.com/package/pkgfiles) - see your project's npm package size before publishing
+- ["files" in package.json](https://docs.npmjs.com/files/package.json#files)
+- ["bundledDependencies" in package.json](https://docs.npmjs.com/files/package.json#bundleddependencies)
