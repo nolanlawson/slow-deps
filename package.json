@@ -1,6 +1,6 @@
 {
   "name": "slow-deps",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Measure which dependencies in a project are slowest to install",
   "main": "index.js",
   "bin": {
