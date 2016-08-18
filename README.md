@@ -42,7 +42,9 @@ from slowest to fastest.
 In additon to the install time, the size on disk and the total number of transitive dependencies are also printed.
 
 Note that this doesn't measure the cost of npm de-duplicating the sub-dependencies; 
-it only measures the time for installing each dependency independently.
+it only measures the time for installing each dependency independently. So the "total time" and "total size"
+are both just rough estimates, as are the per-package times, because you may have packages with many common
+dependencies that would therefore get de-duped.
 
 It's also worth noting that because this tool creates a temporary npm cache while it works,
 you'll be seeing the _uncached_ time for each package. Therefore your actual `npm install` should run a bit faster,
