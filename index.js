@@ -37,7 +37,7 @@ function getDeps () {
     console.log('Analyzing ' + Object.keys(deps).length + ' dependencies...')
     return deps
   }).catch(function () {
-    throw new Error('no package.json found! bailing out')
+    throw new Error('No package.json in the current directory.')
   })
 }
 
