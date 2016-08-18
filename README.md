@@ -34,7 +34,7 @@ Details
 ----
 
 
-Run this in a directory with a `package.json`, and it will analyze all the `dependencies`, 
+Run this in a directory with a `package.json`, and it will take all the `dependencies`, 
 `devDependencies`, and `optionalDependencies`, then `npm install` each one in a temporary 
 directory with a temporary cache, then measure the install times. Each dependency is then listed out 
 from slowest to fastest.
