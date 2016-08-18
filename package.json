@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "description": "Determine which dependencies in a project are slowest to install",
   "main": "index.js",
-  "bin": "index.js",
+  "bin": {
+    "slow-deps": "index.js"
+  },
   "scripts": {
     "test": "standard"
   },
-  "keywords": ["slow", "dependencies", "measure", "npm", "install"],
+  "keywords": [
+    "slow",
+    "dependencies",
+    "measure",
+    "npm",
+    "install"
+  ],
   "author": "Nolan Lawson <nolan@nolanlawson.com>",
   "license": "Apache-2.0",
   "dependencies": {
@@ -27,5 +35,13 @@
   "devDependencies": {
     "standard": "^7.1.2"
   },
-  "files": []
+  "files": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nolanlawson/slow-deps.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nolanlawson/slow-deps/issues"
+  },
+  "homepage": "https://github.com/nolanlawson/slow-deps#readme"
 }
