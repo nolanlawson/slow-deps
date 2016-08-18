@@ -30,6 +30,7 @@ function cleanup () {
   if (oldCache) {
     return exec(shellEscape(['npm', 'config', 'set', 'cache', oldCache]))
   }
+  return Promise.resolve()
 }
 
 function getDeps () {
