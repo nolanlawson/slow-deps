@@ -9,6 +9,9 @@
   "scripts": {
     "test": "standard"
   },
+  "engines": {
+    "node": ">=6"
+  },
   "keywords": [
     "slow",
     "dependencies",
