@@ -25,7 +25,7 @@ var prettierBytes = require('prettier-bytes')
 var prettyMs = require('pretty-ms')
 var tablify = require('tablify').tablify
 var sum = require('math-sum')
-var copyFile = require('filecopy')
+var ncp = denodeify(require('ncp'))
 temp.track()
 
 function getDeps () {
@@ -50,7 +50,7 @@ function setupNpmrc (toDir) {
   // copy .npmrc from current directory if possible
   return stat('.npmrc').then(function (file) {
     if (file.isFile()) {
-      return copyFile('.npmrc', path.join(toDir, '.npmrc'))
+      return ncp('.npmrc', path.join(toDir, '.npmrc'))
     }
     return createEmptyNpmrc(toDir)
   }).catch(function () {
