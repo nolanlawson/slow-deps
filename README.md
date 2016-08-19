@@ -1,4 +1,4 @@
-slow-deps
+slow-deps [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 ====
 
 CLI to measure which dependencies in a project are the slowest to `npm install`.
