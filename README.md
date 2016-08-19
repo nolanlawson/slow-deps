@@ -36,10 +36,10 @@ Details
 
 Run this in a directory with a `package.json`, and it will take all the `dependencies`, 
 `devDependencies`, and `optionalDependencies`, then `npm install` each one in a temporary 
-directory with a temporary cache, then measure the install times. Each dependency is then listed out 
+directory with a temporary cache, then measure the install times. Each dependency is then listed 
 from slowest to fastest.
 
-In additon to the install time, the size on disk and the total number of transitive dependencies are also printed.
+In addition to the install time, the size on disk and the total number of transitive dependencies are also printed.
 
 Note that this doesn't measure the cost of npm de-duplicating the sub-dependencies; 
 it only measures the time for installing each dependency independently. So the "total time" and "total size"
