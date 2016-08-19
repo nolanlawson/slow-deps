@@ -14,6 +14,9 @@ var extend = require('js-extend').extend
 var mkdir = denodeify(temp.mkdir)
 var readFile = denodeify(fs.readFile)
 var readdir = denodeify(fs.readdir)
+var stat = denodeify(fs.stat)
+var writeFile = denodeify(fs.writeFile)
+var appendFile = denodeify(fs.appendFile)
 var path = require('path')
 var now = require('performance-now')
 var ProgressBar = require('progress')
@@ -22,16 +25,8 @@ var prettierBytes = require('prettier-bytes')
 var prettyMs = require('pretty-ms')
 var tablify = require('tablify').tablify
 var sum = require('math-sum')
+var copyFile = require('filecopy')
 temp.track()
-
-var oldCache
-
-function cleanup () {
-  if (oldCache) {
-    return exec(shellEscape(['npm', 'config', 'set', 'cache', oldCache]))
-  }
-  return Promise.resolve()
-}
 
 function getDeps () {
   return readFile('package.json', 'utf8').then(function (str) {
@@ -47,6 +42,22 @@ function getDeps () {
   })
 }
 
+function createEmptyNpmrc (dir) {
+  return writeFile(path.join(dir, '.npmrc'), '', 'utf8')
+}
+
+function setupNpmrc (toDir) {
+  // copy .npmrc from current directory if possible
+  return stat('.npmrc').then(function (file) {
+    if (file.isFile()) {
+      return copyFile('.npmrc', path.join(toDir, '.npmrc'))
+    }
+    return createEmptyNpmrc(toDir)
+  }).catch(function () {
+    return createEmptyNpmrc(toDir)
+  })
+}
+
 function doNpmInstalls (deps) {
   var promise = Promise.resolve()
   var bar = new ProgressBar('[:bar] :percent :etas', {
@@ -54,31 +65,42 @@ function doNpmInstalls (deps) {
     width: 20
   })
   var times = []
+
+  function install (dep, version, dir) {
+    var cache = path.join(dir, '.cache')
+    var nodeModules = path.join(dir, 'node_modules')
+
+    return setupNpmrc(dir).then(function () {
+      // set the cache to a local cache directory
+      return appendFile(path.join(dir, '.npmrc'), '\ncache=' + cache, 'utf8')
+    }).then(function () {
+      var start = now()
+      return exec(shellEscape([ 'npm', 'install', dep + '@' + version ]), {
+        cwd: dir,
+        env: process.env
+      }).then(function () {
+        var totalTime = now() - start
+        return getFolderSize(nodeModules).then(function (size) {
+          return readdir(nodeModules).then(function (subDeps) {
+            times.push({
+              time: totalTime,
+              size: size,
+              dep: dep,
+              subDeps: subDeps.length - 1
+            })
+            bar.tick()
+          })
+        })
+      })
+    })
+  }
+
   Object.keys(deps).forEach(function (dep) {
     var version = deps[dep]
     promise = promise.then(function () {
       return mkdir('')
     }).then(function (dir) {
-      return exec(shellEscape([ 'npm', 'config', 'set', 'cache', path.join(dir, '.cache') ])).then(function () {
-        var start = now()
-        return exec(shellEscape([ 'npm', 'install', dep + '@' + version ]), {
-          cwd: dir,
-          env: process.env
-        }).then(function () {
-          var totalTime = now() - start
-          return getFolderSize(path.join(dir, 'node_modules')).then(function (size) {
-            return readdir(path.join(dir, 'node_modules')).then(function (subDeps) {
-              times.push({
-                time: totalTime,
-                size: size,
-                dep: dep,
-                subDeps: subDeps.length - 1
-              })
-              bar.tick()
-            })
-          })
-        })
-      })
+      return install(dep, version, dir)
     })
   })
   return promise.then(function () {
@@ -112,24 +134,13 @@ function report (times) {
 }
 
 Promise.resolve().then(function () {
-  // remember the user's original `cache` so we can reset it
-  return exec('npm config get cache').then(function (cache) {
-    oldCache = cache.stdout.replace(/\n$/, '')
-  })
-}).then(function () {
   return getDeps()
 }).then(function (deps) {
   return doNpmInstalls(deps)
 }).then(function () {
-  return cleanup()
-}).then(function () {
   process.exit(0)
 }).catch(function (err) {
-  return cleanup().then(function () {
-    console.error(err)
-    console.error(err.stack)
-    process.exit(1)
-  })
+  console.error(err)
+  console.error(err.stack)
+  process.exit(1)
 })
-
-process.on('SIGINT', cleanup)
