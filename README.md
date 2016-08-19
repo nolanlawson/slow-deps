@@ -57,6 +57,11 @@ Options
 
 Tells slow-deps to skip over devDependencies.
 
+Credits
+---
+
+Huge shout-out to [Michael Hart](https://twitter.com/hichaelmart) for the inspiration for this tool!
+
 Related
 ----
 
