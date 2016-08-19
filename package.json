@@ -30,7 +30,6 @@
     "prettier-bytes": "^1.0.3",
     "pretty-ms": "^2.1.0",
     "progress": "^1.1.8",
-    "sanitize-filename": "^1.6.0",
     "tablify": "^0.1.5",
     "temp": "^0.8.3"
   },

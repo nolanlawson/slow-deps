@@ -22,7 +22,6 @@ var prettierBytes = require('prettier-bytes')
 var prettyMs = require('pretty-ms')
 var tablify = require('tablify').tablify
 var sum = require('math-sum')
-var sanitizeFilename = require('sanitize-filename')
 temp.track()
 
 var oldCache
@@ -58,7 +57,7 @@ function doNpmInstalls (deps) {
   Object.keys(deps).forEach(function (dep) {
     var version = deps[dep]
     promise = promise.then(function () {
-      return mkdir(sanitizeFilename(dep))
+      return mkdir('')
     }).then(function (dir) {
       return exec(shellEscape([ 'npm', 'config', 'set', 'cache', path.join(dir, '.cache') ])).then(function () {
         var start = now()
