@@ -55,7 +55,11 @@ Options
 
     slow-deps --production
 
-Tells `slow-deps` to skip over `devDependencies`, just like `npm install --production`.
+Skips `devDependencies`, just like `npm install --production`.
+
+    slow-deps --no-optional
+
+Skips `optionalDependencies`, just like `npm install --no-optional`.
 
 Credits
 ---
