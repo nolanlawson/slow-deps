@@ -26,17 +26,18 @@ var prettyMs = require('pretty-ms')
 var tablify = require('tablify').tablify
 var sum = require('math-sum')
 var ncp = denodeify(require('ncp'))
+var yargs = require('yargs')
 temp.track()
 
 function getDeps () {
   return readFile('package.json', 'utf8').then(function (str) {
     var json = JSON.parse(str)
     var deps = extend({}, json.dependencies)
-    if (process.argv.indexOf('--production') === -1) {
+    if (argv.indexOf('--production') === -1) {
       extend(deps, json.devDependencies)
     }
     // Include optionalDependencies only if --no-optional argument is absent
-    if (process.argv.indexOf('--no-optional') === -1) {
+    if (argv.indexOf('--no-optional') === -1) {
       extend(deps, json.optionalDependencies)
     }
     console.log('Analyzing ' + Object.keys(deps).length + ' dependencies...')
@@ -136,6 +137,19 @@ function report (times) {
     return time.size
   }))))
 }
+
+const argv = yargs
+  .usage('Usage: $0 [options]')
+
+  .boolean('production')
+  .describe('production', 'Skip devlopment dependencies (devDependencies)')
+
+  .boolean('no-optional')
+  .describe('no-optional', 'Skip optional dependencies (optionalDependencies)')
+
+  .help('help')
+  .alias('h', 'help')
+  .argv
 
 Promise.resolve().then(function () {
   return getDeps()
