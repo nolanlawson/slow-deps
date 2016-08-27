@@ -29,6 +29,19 @@ var ncp = denodeify(require('ncp'))
 var yargs = require('yargs')
 temp.track()
 
+var argv = yargs
+  .usage('Usage: $0 [options]')
+
+  .boolean('production')
+  .describe('production', 'Skip devlopment dependencies (devDependencies)')
+
+  .boolean('no-optional')
+  .describe('no-optional', 'Skip optional dependencies (optionalDependencies)')
+
+  .help('help')
+  .alias('h', 'help')
+  .argv
+
 function getDeps () {
   return readFile('package.json', 'utf8').then(function (str) {
     var json = JSON.parse(str)
@@ -137,19 +150,6 @@ function report (times) {
     return time.size
   }))))
 }
-
-const argv = yargs
-  .usage('Usage: $0 [options]')
-
-  .boolean('production')
-  .describe('production', 'Skip devlopment dependencies (devDependencies)')
-
-  .boolean('no-optional')
-  .describe('no-optional', 'Skip optional dependencies (optionalDependencies)')
-
-  .help('help')
-  .alias('h', 'help')
-  .argv
 
 Promise.resolve().then(function () {
   return getDeps()
