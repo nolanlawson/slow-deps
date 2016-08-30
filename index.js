@@ -32,14 +32,31 @@ function getDeps () {
   return readFile('package.json', 'utf8').then(function (str) {
     var json = JSON.parse(str)
     var deps = extend({}, json.dependencies)
+    var skipped = {
+      dev: 0,
+      optional: 0
+    }
     if (process.argv.indexOf('--production') === -1) {
       extend(deps, json.devDependencies)
+    } else {
+      skipped.dev = json.devDependencies ? Object.keys(json.devDependencies).length : 0
     }
     // Include optionalDependencies only if --no-optional argument is absent
     if (process.argv.indexOf('--no-optional') === -1) {
       extend(deps, json.optionalDependencies)
+    } else {
+      skipped.optional = json.optionalDependencies ? Object.keys(json.optionalDependencies).length : 0
     }
-    console.log('Analyzing ' + Object.keys(deps).length + ' dependencies...')
+    var analysis_start_msg = 'Analyzing ' + Object.keys(deps).length + ' dependencies'
+    if (skipped.dev && skipped.optional) {
+      analysis_start_msg += ' (Skipping ' + skipped.dev + ' devDependencies / skipping ' + skipped.optional + ' optionalDependencies)'
+    } else if (skipped.dev) {
+      analysis_start_msg += ' (Skipping ' + skipped.dev + ' devDependencies)'
+    } else if (skipped.optional) {
+      analysis_start_msg += ' (Skipping ' + skipped.optional + ' optionalDependencies)'
+    }
+    analysis_start_msg += '...';
+    console.log(analysis_start_msg)
     return deps
   }).catch(function () {
     throw new Error('No package.json in the current directory.')
