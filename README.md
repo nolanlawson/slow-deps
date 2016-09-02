@@ -53,18 +53,25 @@ assuming everything is cached.
 Options
 ----
 
-    slow-deps --production
+```
+Usage: slow-deps [options]
 
-Skips `devDependencies`, just like `npm install --production`.
+Options:
+  --production, --prod  Skip devDependencies                           [boolean]
+  --no-optional         Skip optionalDependencies                      [boolean]
+  -h, --help            Show help                                      [boolean]
 
-    slow-deps --no-optional
-
-Skips `optionalDependencies`, just like `npm install --no-optional`.
+Examples:
+  slow-deps                             measure all deps in the current project
+  slow-deps --production --no-optional  skip both optional and dev dependencies
+```
 
 Credits
 ---
 
 Huge shout-out to [Michael Hart](https://twitter.com/hichaelmart) for the inspiration for this tool!
+
+Also a big thanks to [all contributors](https://github.com/nolanlawson/slow-deps/graphs/contributors)!
 
 Related
 ----
