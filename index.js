@@ -64,16 +64,16 @@ function getDeps () {
     } else {
       skipped.optional = json.optionalDependencies ? Object.keys(json.optionalDependencies).length : 0
     }
-    var analysis_start_msg = 'Analyzing ' + Object.keys(deps).length + ' dependencies'
+    var startMessage = 'Analyzing ' + Object.keys(deps).length + ' dependencies'
     if (skipped.dev && skipped.optional) {
-      analysis_start_msg += ' (Skipping ' + skipped.dev + ' devDependencies / skipping ' + skipped.optional + ' optionalDependencies)'
+      startMessage += ' (Skipping ' + skipped.dev + ' devDependencies / skipping ' + skipped.optional + ' optionalDependencies)'
     } else if (skipped.dev) {
-      analysis_start_msg += ' (Skipping ' + skipped.dev + ' devDependencies)'
+      startMessage += ' (Skipping ' + skipped.dev + ' devDependencies)'
     } else if (skipped.optional) {
-      analysis_start_msg += ' (Skipping ' + skipped.optional + ' optionalDependencies)'
+      startMessage += ' (Skipping ' + skipped.optional + ' optionalDependencies)'
     }
-    analysis_start_msg += '...';
-    console.log(analysis_start_msg)
+    startMessage += '...'
+    console.log(startMessage)
     return deps
   }).catch(function () {
     throw new Error('No package.json in the current directory.')
