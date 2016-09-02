@@ -46,11 +46,11 @@ function getDeps () {
   return readFile('package.json', 'utf8').then(function (str) {
     var json = JSON.parse(str)
     var deps = extend({}, json.dependencies)
-    if (!argv["production"]) {
+    if (!argv['production']) {
       extend(deps, json.devDependencies)
     }
     // Include optionalDependencies only if --no-optional argument is absent
-    if (!argv["no-optional"]) {
+    if (!argv['no-optional']) {
       extend(deps, json.optionalDependencies)
     }
     console.log('Analyzing ' + Object.keys(deps).length + ' dependencies...')
