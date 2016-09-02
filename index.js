@@ -33,10 +33,13 @@ var argv = yargs
   .usage('Usage: $0 [options]')
 
   .boolean('production')
-  .describe('production', 'Skip devlopment dependencies (devDependencies)')
+  .describe('production', 'Skip devDependencies')
 
   .boolean('no-optional')
-  .describe('no-optional', 'Skip optional dependencies (optionalDependencies)')
+  .describe('no-optional', 'Skip optionalDependencies')
+
+  .example('$0', 'measure all deps in the current project')
+  .example('$0 --production --no-optional', 'skip both optional and dev dependencies')
 
   .help('help')
   .alias('h', 'help')
