@@ -34,6 +34,7 @@ var argv = yargs
 
   .boolean('production')
   .describe('production', 'Skip devDependencies')
+  .alias('production', 'prod')
 
   .boolean('no-optional')
   .describe('no-optional', 'Skip optionalDependencies')
@@ -45,32 +46,37 @@ var argv = yargs
   .alias('h', 'help')
   .argv
 
+function formatPlural (num, strSingular, strPlural) {
+  return num + ' ' + (num === 1 ? strSingular : strPlural)
+}
+
 function getDeps () {
   return readFile('package.json', 'utf8').then(function (str) {
-    var json = JSON.parse(str)
-    var deps = extend({}, json.dependencies)
-    var skipped = {
-      dev: 0,
-      optional: 0
-    }
-    if (!argv['production']) {
-      extend(deps, json.devDependencies)
+    var pkgJson = JSON.parse(str)
+    var deps = extend({}, pkgJson.dependencies)
+    var devSkipped = 0
+    var optionalSkipped = 0
+    // Include devDependencies only if --production is absent
+    if (!argv.production) {
+      extend(deps, pkgJson.devDependencies)
     } else {
-      skipped.dev = json.devDependencies ? Object.keys(json.devDependencies).length : 0
+      devSkipped = Object.keys(pkgJson.devDependencies || {}).length
     }
-    // Include optionalDependencies only if --no-optional argument is absent
-    if (!argv['no-optional']) {
-      extend(deps, json.optionalDependencies)
+    // Include optionalDependencies only if --no-optional argument is absent.
+    // Note that yargs parses "--no-*" deps in a special way, hence this `!== false` check.
+    if (argv.optional !== false) {
+      extend(deps, pkgJson.optionalDependencies)
     } else {
-      skipped.optional = json.optionalDependencies ? Object.keys(json.optionalDependencies).length : 0
+      optionalSkipped = Object.keys(pkgJson.optionalDependencies || {}).length
     }
     var startMessage = 'Analyzing ' + Object.keys(deps).length + ' dependencies'
-    if (skipped.dev && skipped.optional) {
-      startMessage += ' (Skipping ' + skipped.dev + ' devDependencies / skipping ' + skipped.optional + ' optionalDependencies)'
-    } else if (skipped.dev) {
-      startMessage += ' (Skipping ' + skipped.dev + ' devDependencies)'
-    } else if (skipped.optional) {
-      startMessage += ' (Skipping ' + skipped.optional + ' optionalDependencies)'
+    if (devSkipped && optionalSkipped) {
+      startMessage += ' (skipping ' + formatPlural(devSkipped, 'devDependency', 'devDependencies') +
+        ' and ' + formatPlural(optionalSkipped, 'optionalDependency', 'optionalDependencies') + ')'
+    } else if (devSkipped) {
+      startMessage += ' (skipping ' + formatPlural(devSkipped, 'devDependency', 'devDependencies') + ')'
+    } else if (optionalSkipped) {
+      startMessage += ' (skipping ' + formatPlural(optionalSkipped, 'optionalDependency', 'optionalDependencies') + ')'
     }
     startMessage += '...'
     console.log(startMessage)
