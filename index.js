@@ -39,6 +39,9 @@ var argv = yargs
   .boolean('no-optional')
   .describe('no-optional', 'Skip optionalDependencies')
 
+  .boolean('no-shrinkwrap')
+  .describe('no-shrinkwrap', 'Ignore npm-shrinkwrap.json')
+
   .example('$0', 'measure all deps in the current project')
   .example('$0 --production --no-optional', 'skip both optional and dev dependencies')
 
@@ -86,6 +89,22 @@ function getDeps () {
   })
 }
 
+function getShrinkwrapDeps () {
+  var resolve = Promise.resolve({})
+  return stat('npm-shrinkwrap.json').then(function (file) {
+    if (argv.shrinkwrap !== false && file.isFile()) {
+      return readFile('npm-shrinkwrap.json', 'utf8').then(function (str) {
+        return JSON.parse(str).dependencies || {}
+      }).catch(function () {
+        return resolve
+      })
+    }
+    return resolve
+  }).catch(function () {
+    return resolve
+  })
+}
+
 function createEmptyNpmrc (dir) {
   return writeFile(path.join(dir, '.npmrc'), '', 'utf8')
 }
@@ -102,7 +121,16 @@ function setupNpmrc (toDir) {
   })
 }
 
-function doNpmInstalls (deps) {
+function createNpmShrinkwrap (dir, dep) {
+  return writeFile(path.join(dir, 'npm-shrinkwrap.json'), JSON.stringify(dep), 'utf8')
+}
+
+function createPackageJson (dir, dep, version) {
+  var content = '{ "dependencies": { "' + dep + '": "' + version + '" } }'
+  return writeFile(path.join(dir, 'package.json'), content, 'utf8')
+}
+
+function doNpmInstalls (deps, shrinkwrapDeps) {
   var promise = Promise.resolve()
   var bar = new ProgressBar('[:bar] :percent :etas', {
     total: Object.keys(deps).length,
@@ -118,8 +146,13 @@ function doNpmInstalls (deps) {
       // set the cache to a local cache directory
       return appendFile(path.join(dir, '.npmrc'), '\ncache=' + cache, 'utf8')
     }).then(function () {
+      if (!shrinkwrapDeps[dep]) return Promise.resolve()
+      return createNpmShrinkwrap(dir, shrinkwrapDeps[dep])
+    }).then(function () {
+      return createPackageJson(dir, dep, version)
+    }).then(function () {
       var start = now()
-      return exec(shellEscape([ 'npm', 'install', dep + '@' + version ]), {
+      return exec(shellEscape([ 'npm', 'install' ]), {
         cwd: dir,
         env: process.env
       }).then(function () {
@@ -177,10 +210,10 @@ function report (times) {
   }))))
 }
 
-Promise.resolve().then(function () {
-  return getDeps()
-}).then(function (deps) {
-  return doNpmInstalls(deps)
+Promise.all([getDeps(), getShrinkwrapDeps()]).then(function (results) {
+  var deps = results[0]
+  var shrinkwrap = results[1]
+  return doNpmInstalls(deps, shrinkwrap)
 }).then(function () {
   process.exit(0)
 }).catch(function (err) {

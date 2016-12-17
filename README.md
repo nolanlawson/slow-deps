@@ -59,6 +59,7 @@ Usage: slow-deps [options]
 Options:
   --production, --prod  Skip devDependencies                           [boolean]
   --no-optional         Skip optionalDependencies                      [boolean]
+  --no-shrinkwrap       Ignore npm-shrinkwrap.json                     [boolean]
   -h, --help            Show help                                      [boolean]
 
 Examples:
