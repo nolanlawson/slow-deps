@@ -90,18 +90,15 @@ function getDeps () {
 }
 
 function getShrinkwrapDeps () {
-  var resolve = Promise.resolve({})
   return stat('npm-shrinkwrap.json').then(function (file) {
     if (argv.shrinkwrap !== false && file.isFile()) {
       return readFile('npm-shrinkwrap.json', 'utf8').then(function (str) {
         return JSON.parse(str).dependencies || {}
-      }).catch(function () {
-        return resolve
       })
     }
-    return resolve
+    return {}
   }).catch(function () {
-    return resolve
+    return {}
   })
 }
 
@@ -146,7 +143,9 @@ function doNpmInstalls (deps, shrinkwrapDeps) {
       // set the cache to a local cache directory
       return appendFile(path.join(dir, '.npmrc'), '\ncache=' + cache, 'utf8')
     }).then(function () {
-      if (!shrinkwrapDeps[dep]) return Promise.resolve()
+      if (!shrinkwrapDeps[dep]) {
+        return
+      }
       return createNpmShrinkwrap(dir, shrinkwrapDeps[dep])
     }).then(function () {
       return createPackageJson(dir, dep, version)
